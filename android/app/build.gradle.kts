@@ -44,5 +44,5 @@ flutter {
 }
 
 android {
-        ndkVersion = "26.3.11579264"
+        ndkVersion = "27.0.12077973""
     }
