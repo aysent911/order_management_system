@@ -1,3 +1,2 @@
-# boldplusAI-OMS
-order management system
-A business system for centralised management of your orders, sales and inventory.
+# order_management_system
+A business application for centralised management of orders, sales and inventory
