@@ -25,12 +25,12 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  bool passwordObscure=true;
-  bool loginSuccessful =false;
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  bool _passwordObscure=true;
+  bool _loginSuccessful =false;
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   
   Future<int> login() async {
@@ -120,21 +120,45 @@ class _LoginPageState extends State<LoginPage> {
             // axis because Columns are vertical (the cross axis would be
             // horizontal).
             children: <Widget>[
+              Center(
+                child: const Text(
+                  'boldplus-OMS',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               const Divider(
-                color : Colors.deepPurple,
-                height: 25
+                height: 70,
+                color: Colors.white,
+              ),
+              const Divider(
+                height: 30,
+              ),
+              const Text(
+                ' Login to continue',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                  )
+                ),
+              const Divider(
+                height: 15,
+                color: Colors.white
               ),
               TextFormField(
-                controller: userNameController,
+                controller: _userNameController,
                 style: const TextStyle(fontSize: 20,color: Colors.black),
                 decoration: const InputDecoration(
-                  labelText: ('User Name'),
+                  labelText: 'User Email',
                   labelStyle: TextStyle(fontSize:20, color: Colors.black),
-                  hintText:  ('Enter preferred name'),
+                  hintText:  'user@email.com',
                   icon: Icon(
-                    Icons.contact_page,
+                    Icons.account_circle_sharp,
                     color: Colors.deepPurple,
-                    size: 50
+                    size: 25
                   ),
                   border: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
                 ),
@@ -147,30 +171,30 @@ class _LoginPageState extends State<LoginPage> {
                 //validator: (String val){}
               ),
               const Divider(
-                color: Colors.deepPurple,
-                height: 15
+                height: 15,
+                color: Colors.white,
               ),
               TextFormField(
-                controller: passwordController,
-                obscureText: passwordObscure,
+                controller: _passwordController,
+                obscureText: _passwordObscure,
                 style: const TextStyle(fontSize: 20,color: Colors.black),
                 decoration: InputDecoration(
-                  labelText: ('Password'),
+                  labelText: 'Password',
                   labelStyle: const TextStyle(fontSize:20, color: Colors.black),
-                  hintText:  ('*****'),
+                  hintText:  '**********',
                   icon: const Icon(
-                    Icons.password_rounded,
+                    Icons.key,
                     color: Colors.deepPurple,
-                    size: 50
+                    size: 25
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.remove_red_eye),
                     onPressed: (){
                       setState(() {
-                        if(passwordObscure==false){
-                          passwordObscure=true;
+                        if(_passwordObscure==false){
+                          _passwordObscure=true;
                         }else{
-                          passwordObscure=false;
+                          _passwordObscure=false;
                         }                        
                       });
                     }
@@ -186,62 +210,85 @@ class _LoginPageState extends State<LoginPage> {
                 //validator: (String val){}
               ),
               const Divider(
-                color: Colors.deepPurple,
-                height: 15.0,
+                height: 15,
+                color: Colors.white,
               ),
-              Center(
-                //horizontally center
-                child: ElevatedButton(
-                  onPressed: () async{
-                    int error=await login();//use await to get a Future<>
-                    setState((){
-                      if(error==-1){                        
-      dialog.errorMessage('Failed!Check internet connection and try again.',
-      context);
-                      }else if(loginSuccessful){
-                        loadStockList();
-                        userNameController.clear();
-                        passwordController.clear();
-                        Navigator.pushNamed(context,"/stock");
-                      }else{
-      dialog.errorMessage('Account not found! Please SignUp for an account.',
-      context);
-                      }                  
-                    });
-                  },
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.white
-                    )
-                  ),
+            //Center(
+              //horizontally center
+              //child: 
+              ElevatedButton(
+                onPressed: () async{
+                  int error=await login();//use await to get a Future<>
+                  setState((){
+                    if(error==-1){                        
+    dialog.errorMessage('Failed!Check internet connection and try again.',
+    context);
+                    }else if(_loginSuccessful){
+                      loadStockList();
+                      _userNameController.clear();
+                      _passwordController.clear();
+                      Navigator.pushNamed(context,"/stock");
+                    }else{
+    dialog.errorMessage('Account not found! Please SignUp for an account.',
+    context);
+                    }                  
+                  });
+                },
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStateProperty<Color>.fromMap(<WidgetStatesConstraint, Color>{
+                    WidgetState.focused: Colors.blueAccent,
+                    WidgetState.pressed: Colors.white,
+                    WidgetState.any: Colors.deepPurple,
+                  }),
                 ),
-              ),              
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
+                    color: Colors.white
+                  )
+                ),
+              ),
+            //),
               const Divider(
-                color: Colors.deepPurple,
-                height: 15.0,
+                height: 30,
               ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: (){
-                    setState((){
-                      Navigator.pushNamed(context,"/sign_up");
-                    });
-                  },
-                  child: const Text(
-                    'SignUp',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.white
-                    )
-                  ),
+              const Text(
+                ' First time?',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.normal,
+                  )
                 ),
-              ),            
+            //Center(
+              //child: 
+              ElevatedButton(
+                onPressed: (){
+                  setState((){
+                    Navigator.pushNamed(context,"/sign_up");
+                  });
+                },
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStateProperty<Color>.fromMap(<WidgetStatesConstraint, Color>{
+                    WidgetState.focused: Colors.blueAccent,
+                    WidgetState.pressed: Colors.white,
+                    WidgetState.any: Colors.deepPurple,
+                  }),
+                ),
+                child: const Text(
+                  'Create Account',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
+                    color: Colors.white
+                  )
+                ),
+              ),
+            //),            
             ],
           ),
         ),
